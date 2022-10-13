@@ -181,6 +181,7 @@ public class HomeFrame extends javax.swing.JFrame {
         buttonHome.setBackground(new java.awt.Color(204, 204, 204));
         buttonHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/home32.png"))); // NOI18N
         buttonHome.setToolTipText("Home");
+        buttonHome.setBorder(null);
         buttonHome.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonHomeActionPerformed(evt);
