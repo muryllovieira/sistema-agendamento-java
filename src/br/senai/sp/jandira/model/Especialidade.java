@@ -12,22 +12,23 @@ public class Especialidade {
     // Construtores de clase
     public Especialidade(String nome) {
         this.nome = nome;
-        this.contador++;
-        this.codigo = contador;
+        gerarCodigo();
     }
 
     public Especialidade(String nome, String descricao) {
         this.nome = nome;
         this.descricao = descricao;
-        this.contador++;
-        this.codigo = contador;
+        gerarCodigo();
     }
 
     public Especialidade() { // Construtor Default / Padrão
+        gerarCodigo();
+    }
+    
+    private void gerarCodigo() {
         this.contador++;
         this.codigo = contador;
     }
-
     // Métodos de acessos aos atributos
     public int getContador() {
         return contador;
