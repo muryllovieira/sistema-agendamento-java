@@ -4,12 +4,26 @@ import java.time.LocalDate;
 
 public class PlanoDeSaude {
 
+        private static int contador = 99;
 	private String operadora;
 	private String categoria;
 	private String numero;
 	private LocalDate validade;
+        private Integer codigo;
 	private static int quantidade;
 	
+        public PlanoDeSaude(String numero, String categoria, String operadora, LocalDate validade) {
+            this.operadora = operadora;
+            this.categoria = categoria;
+            this.numero = numero;
+            this.validade = validade;
+            gerarCodigo();
+       
+        }
+        
+        
+        
+        
 	public PlanoDeSaude(String operadora) {
 		this.operadora = operadora;
 		this.quantidade++;
@@ -52,6 +66,21 @@ public class PlanoDeSaude {
 	public static int getQuantidade() {
 		return quantidade;
 	}
+        
+        public void setCodigo(Integer codigo) {
+		this.codigo = codigo;
+	}
+	public Integer getCodigo() {
+		return codigo;
+	}
+        
+        private void gerarCodigo() {
+        this.contador++;
+        this.codigo = contador;
+    }
+    public int indexOf(PlanoDeSaude p) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 	
 	
 	
