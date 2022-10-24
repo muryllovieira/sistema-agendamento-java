@@ -40,7 +40,7 @@ public class PlanoDeSaudeDAO {
 
         for (PlanoDeSaude p : planosDeSaude) {
             if (p.getNumero() == planoDeSaudeAtualizada.getNumero()) {
-                planosDeSaude.set(planoDeSaudeAtualizada.indexOf(p), planoDeSaudeAtualizada);
+                planosDeSaude.set(planosDeSaude.indexOf(p), planoDeSaudeAtualizada);
                 break;
             }
 
@@ -77,7 +77,7 @@ public class PlanoDeSaudeDAO {
         
         System.out.println(planosDeSaude.size());
         
-        String[] titulo = {"CÓDIGO", "NÚMERO", "NOME DO PLANO DE SAÚDE", "CATEGORIA", "VALIDADE"};
+        String[] titulo = {"CÓDIGO", "NÚMERO", "OPERADORA", "CATEGORIA", "VALIDADE"};
         String[][] dados = new String[planosDeSaude.size()][5];
         
         
@@ -85,8 +85,8 @@ public class PlanoDeSaudeDAO {
             int i = planosDeSaude.indexOf(p);
             dados[i][0] = p.getCodigo().toString();
             dados[i][1] = p.getNumero();
-            dados[i][2] = p.getCategoria();
-            dados[i][3] = p.getOperadora();
+            dados[i][2] = p.getOperadora();
+            dados[i][3] = p.getCategoria();
             dados[i][4] = p.getValidade().toString();
             
         }

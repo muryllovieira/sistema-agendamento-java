@@ -198,13 +198,14 @@ public class HomeFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSairActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_buttonSairActionPerformed
 
     private void buttonEspecialidadesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEspecialidadesActionPerformed
 
         panelEspecialidades.setVisible(true);
         panelHome.setVisible(false);
+        panelPlanoDeSaude.setVisible(false);
 
     }//GEN-LAST:event_buttonEspecialidadesActionPerformed
 
@@ -216,10 +217,13 @@ public class HomeFrame extends javax.swing.JFrame {
       
       panelPlanoDeSaude.setVisible(true);
       panelHome.setVisible(false);
+      panelEspecialidades.setVisible(false);
       
     }//GEN-LAST:event_buttonPlanoSaudeActionPerformed
 
     private void buttonHomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonHomeActionPerformed
+        
+        panelPlanoDeSaude.setVisible(false);
         panelEspecialidades.setVisible(false);
         panelHome.setVisible(true);
     }//GEN-LAST:event_buttonHomeActionPerformed

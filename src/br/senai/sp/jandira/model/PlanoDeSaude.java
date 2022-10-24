@@ -21,16 +21,13 @@ public class PlanoDeSaude {
        
         }
         
-        
-        
-        
 	public PlanoDeSaude(String operadora) {
 		this.operadora = operadora;
-		this.quantidade++;
+		gerarCodigo();
 	}
 	
 	public PlanoDeSaude() {
-		this.quantidade++;
+            	gerarCodigo();
 	}
 	
 	public void setOperadora(String operadora) {
@@ -77,20 +74,6 @@ public class PlanoDeSaude {
         private void gerarCodigo() {
         this.contador++;
         this.codigo = contador;
-    }
-    public int indexOf(PlanoDeSaude p) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+    }	
 	
 }
