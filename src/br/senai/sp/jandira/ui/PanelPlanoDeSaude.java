@@ -96,7 +96,7 @@ public class PanelPlanoDeSaude extends javax.swing.JPanel {
         } else {
             JOptionPane.showMessageDialog(
                     this,
-                    "Por Favor, selecione a especialidade que você deseja excluir",
+                    "Por Favor, selecione o plano de saúde que você deseja excluir",
                     "Atenção",
                     JOptionPane.WARNING_MESSAGE);
         }
@@ -107,10 +107,10 @@ public class PanelPlanoDeSaude extends javax.swing.JPanel {
         if (getLinha() != -1) {
             editarPlanoDeSaude();
         } else {
-            JOptionPane.showConfirmDialog(
+            JOptionPane.showMessageDialog(
                     this,
-                    "Por favor, selecione a especialidade que você deseja editar.",
-                    "Especialidades",
+                    "Por favor, selecione o plano de saúde que você deseja editar.",
+                    "Plano de Saúde",
                     JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_buttonEditarPlanoDeSaudeActionPerformed
