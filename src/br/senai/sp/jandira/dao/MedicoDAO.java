@@ -2,9 +2,15 @@ package br.senai.sp.jandira.dao;
 
 import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.PlanoDeSaude;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -17,8 +23,29 @@ public class MedicoDAO {
     dos planos de saude, por exemplo, adicionar um novo,
     excluir um plano de saude, etc.
      */
-    
+    private final static String URL = "C:\\Users\\22282224\\java\\Medico.txt";
+    private final static String URL_TEMP = "C:\\Users\\22282224\\java\\Medico-temp.txt";
+    private final static Path PATH = Paths.get(URL);
+    private final static Path PATH_TEMP = Paths.get(URL_TEMP);
+
     private static ArrayList<Medico> medicos = new ArrayList<>();
+
+    public static void gravar(Medico m) { // CREATE
+        medicos.add(m);
+
+        try {
+            BufferedWriter escritor = Files.newBufferedWriter(
+                    PATH,
+                    StandardOpenOption.APPEND,
+                    StandardOpenOption.WRITE);
+
+            escritor.write(m.getMedicoSeparadoPorPontoEVirgula());
+            escritor.newLine();
+            escritor.close();
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, "Ocorreu um erro");
+        }
+    }
 
     public static ArrayList<Medico> getMedico() { // READ
         return medicos;
@@ -47,7 +74,7 @@ public class MedicoDAO {
 
         }
         
-        //atualizarArquivo();
+        atualizarArquivo();
         
     }
 
@@ -60,23 +87,86 @@ public class MedicoDAO {
             }
         }
 
-        //atualizarArquivo();
+        atualizarArquivo();
         
     }
+    
+    private static void atualizarArquivo() {
+
+        // PASSO 1 - Criar uma representação dos arquivos que serão manipulados
+        File arquivoAtual = new File(URL);
+        File arquivoTemp = new File(URL_TEMP);
+
+        try {
+            // Criar o arquivo temporário
+            arquivoTemp.createNewFile();
+
+            // Abrir o arquivo temporário para escrita
+            BufferedWriter bwTemp = Files.newBufferedWriter(
+                    PATH_TEMP,
+                    StandardOpenOption.APPEND,
+                    StandardOpenOption.WRITE);
+
+            // Iterar na lista para adicionar os medicos
+            // no arquivo temporário, exceto o registro que não
+            // queremos mais
+            for(Medico m : medicos) {
+                bwTemp.write(m.getMedicoSeparadoPorPontoEVirgula());
+                bwTemp.newLine();
+            }
+            
+            // Excluir o arquivo atual
+            arquivoAtual.delete();
+            
+            // Renomear o arquivo temporário
+            arquivoTemp.renameTo(arquivoAtual);
+            
+            bwTemp.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
     
     // Criar uma lista inicial de medicos
     public static void criarListaDeMedicos() {
-        Medico m1 = new Medico("Maria", "1111-111", "(11)94444-4444");
-        Medico m2 = new Medico("José", "2222-222", "(11)95555-5555");
-        Medico m3 = new Medico("Pedro", "3333-333", "(11)97777-7777");
-        Medico m4 = new Medico("Lucas", "4444-444", "(11)99999-9999");
-        
-        medicos.add(m1);
-        medicos.add(m2);
-        medicos.add(m3);
-        medicos.add(m4);
+     
+        try {
+            BufferedReader leitor = Files.newBufferedReader(PATH);
+
+            String linha = leitor.readLine();
+
+            while (linha != null) {
+
+                String[] vetor = linha.split(";");
+                
+                String[] data = vetor[5].split("-");
+
+                Medico m = new Medico(
+                        Integer.valueOf(vetor[0]),
+                        vetor[2],
+                        vetor[4],
+                        vetor[3],
+                        vetor[1],
+                        LocalDate.of(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2])));
+
+                // Guardar a especialidade na lista
+                medicos.add(m);
+
+                // Ler a próxima linha
+                linha = leitor.readLine();
+
+            }
+
+            leitor.close();
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                    null,
+                    "Ocorreu um erro ao ler o arquivo.");
+        }
     }
-    
     public static DefaultTableModel getTabelaMedicos() {
 
         System.out.println(medicos.size());

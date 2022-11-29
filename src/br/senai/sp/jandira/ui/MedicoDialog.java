@@ -1,8 +1,11 @@
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.MedicoDAO;
 import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.OperacaoEnum;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 public class MedicoDialog extends javax.swing.JDialog {
 
@@ -41,18 +44,18 @@ public class MedicoDialog extends javax.swing.JDialog {
         textFieldCodigoMedico.setText(medico.getCodigo().toString());
         textFieldCrmMedico.setText(medico.getCrm());
         textFieldNomeMedico.setText(medico.getNome());
-        textFieldEmailMedico.setText(medico.getEmail());
         textFieldTelefoneMedico.setText(medico.getTelefone());
-        textFieldDataNascimentoMedico.setText(medico.get().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        textFieldEmailMedico.setText(medico.getEmail());
+        textFieldDataNascimentoMedico.setText(medico.getDataDeNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
     private void preencherTitulo() {
-        labelPlanoDeSaudeAdicionar.setText("Planos de Saúde - " + operacao);
+        labelMedicoAdicionar.setText("Médico - " + operacao);
 
         if (operacao == OperacaoEnum.EDITAR) {
-            labelPlanoDeSaudeAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/editar.png")));
+            labelMedicoAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/editar.png")));
         } else {
-            labelPlanoDeSaudeAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/adicionar.png")));
+            labelMedicoAdicionar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/adicionar.png")));
         }
 
     }
@@ -62,7 +65,7 @@ public class MedicoDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        labelMedicoAdicionar = new javax.swing.JLabel();
         panelDetalhesMedico = new javax.swing.JPanel();
         labelCodigoMedico = new javax.swing.JLabel();
         textFieldCodigoMedico = new javax.swing.JTextField();
@@ -93,10 +96,10 @@ public class MedicoDialog extends javax.swing.JDialog {
         jPanel1.setBackground(new java.awt.Color(0, 204, 204));
         jPanel1.setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Consolas", 1, 18)); // NOI18N
-        jLabel1.setText("Médico - ADICIONAR");
-        jPanel1.add(jLabel1);
-        jLabel1.setBounds(60, 20, 190, 22);
+        labelMedicoAdicionar.setFont(new java.awt.Font("Consolas", 1, 18)); // NOI18N
+        labelMedicoAdicionar.setText("Médico - ADICIONAR");
+        jPanel1.add(labelMedicoAdicionar);
+        labelMedicoAdicionar.setBounds(60, 12, 270, 40);
 
         getContentPane().add(jPanel1);
         jPanel1.setBounds(0, 0, 650, 60);
@@ -105,6 +108,7 @@ public class MedicoDialog extends javax.swing.JDialog {
 
         labelCodigoMedico.setText("Código:");
 
+        textFieldCodigoMedico.setEditable(false);
         textFieldCodigoMedico.setBackground(new java.awt.Color(255, 255, 204));
 
         labelCrmMedico.setText("CRM:");
@@ -237,7 +241,6 @@ public class MedicoDialog extends javax.swing.JDialog {
                     .addComponent(textFieldTelefoneMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textFieldEmailMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(textFieldDataNascimentoMedico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelDetalhesMedicoLayout.createSequentialGroup()
                         .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -254,12 +257,20 @@ public class MedicoDialog extends javax.swing.JDialog {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(buttonEsquerdoMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
                 .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(buttonCancelarMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonSalvarMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
+
+        try{
+            textFieldDataNascimentoMedico.setFormatterFactory(new javax.swing.text.
+                DefaultFormatterFactory(new javax.swing.text.MaskFormatter
+                    ("##/##/####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         getContentPane().add(panelDetalhesMedico);
         panelDetalhesMedico.setBounds(20, 80, 610, 420);
@@ -282,12 +293,69 @@ public class MedicoDialog extends javax.swing.JDialog {
 
     }//GEN-LAST:event_buttonSalvarMedicoActionPerformed
 
+    private void editar() {
+        medico.setCrm(textFieldCrmMedico.getText());
+        medico.setNome(textFieldNomeMedico.getText());
+        medico.setTelefone(textFieldTelefoneMedico.getText());
+        medico.setEmail(textFieldEmailMedico.getText());
+        medico.setDataDeNascimento(LocalDate.parse(textFieldDataNascimentoMedico.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+        MedicoDAO.atualizar(medico);
+
+        JOptionPane.showMessageDialog(
+                null,
+                "Médico atualizado com sucesso!",
+                "Médico",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        dispose();
+    }
+
+    private void adicionar() {
+        
+        
+        if (textFieldCrmMedico.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O CRM do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
+            textFieldCrmMedico.requestFocus();
+        } else if (textFieldEmailMedico.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O email do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
+            textFieldEmailMedico.requestFocus();
+        } else if (textFieldNomeMedico.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O nome do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
+            textFieldNomeMedico.requestFocus();
+        } else if (textFieldDataNascimentoMedico.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "A data de nascimento do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
+            textFieldDataNascimentoMedico.requestFocus();
+        } else if (textFieldTelefoneMedico.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "O telefone do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
+            textFieldTelefoneMedico.requestFocus();
+        } else {
+        
+            // Criar um objeto Medico
+            Medico novoMedico = new Medico();
+            novoMedico.setCrm(textFieldCrmMedico.getText());
+            novoMedico.setNome(textFieldNomeMedico.getText());
+            novoMedico.setTelefone(textFieldTelefoneMedico.getText());
+            novoMedico.setEmail(textFieldEmailMedico.getText());
+            novoMedico.setDataDeNascimento(LocalDate.parse(textFieldDataNascimentoMedico.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+            // Gravar o objeto, através do Dao.
+            MedicoDAO.gravar(novoMedico);
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Médico gravado com sucesso!",
+                    "Médicos",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+            dispose();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancelarMedico;
     private javax.swing.JButton buttonDIreitoMedico;
     private javax.swing.JButton buttonEsquerdoMedico;
     private javax.swing.JButton buttonSalvarMedico;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel labelCodigoMedico;
     private javax.swing.JLabel labelCrmMedico;
@@ -295,6 +363,7 @@ public class MedicoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel labelEmailMedico;
     private javax.swing.JLabel labelEspecialidadesMedico;
     private javax.swing.JLabel labelListaEspecialidadeMedico;
+    private javax.swing.JLabel labelMedicoAdicionar;
     private javax.swing.JLabel labelNomeMedico;
     private javax.swing.JLabel labelTelefoneMedico;
     private javax.swing.JList<String> listEspecialidadeMedico;
