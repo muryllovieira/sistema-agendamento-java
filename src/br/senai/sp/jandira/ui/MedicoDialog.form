@@ -107,7 +107,7 @@
                                   <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="buttonEsquerdoMedico" pref="41" max="32767" attributes="0"/>
-                                      <Component id="buttonDIreitoMedico" max="32767" attributes="0"/>
+                                      <Component id="buttonDireitoMedico" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -187,7 +187,7 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="scrollEspecialidadeMedico" min="-2" pref="154" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <Component id="buttonDIreitoMedico" min="-2" pref="41" max="-2" attributes="0"/>
+                                  <Component id="buttonDireitoMedico" min="-2" pref="41" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                   <Component id="buttonEsquerdoMedico" min="-2" pref="41" max="-2" attributes="0"/>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
@@ -294,7 +294,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="listListaEspecialidadeMedico">
+            <Component class="javax.swing.JList" name="listListaEspecialidades">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="ff" red="ff" type="rgb"/>
@@ -321,7 +321,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="javax.swing.JList" name="listEspecialidadeMedico">
+            <Component class="javax.swing.JList" name="listListaEspecialidadeMedico">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="cc" green="ff" red="ff" type="rgb"/>
@@ -345,8 +345,11 @@
               <Image iconType="3" name="/br/senai/sp/jandira/img/seta-esquerda.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonEsquerdoMedicoActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="buttonDIreitoMedico">
+        <Component class="javax.swing.JButton" name="buttonDireitoMedico">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="66" green="ff" red="66" type="rgb"/>
@@ -355,6 +358,9 @@
               <Image iconType="3" name="/br/senai/sp/jandira/img/seta-direita.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="buttonDireitoMedicoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="buttonCancelarMedico">
           <Properties>

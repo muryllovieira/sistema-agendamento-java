@@ -1,7 +1,7 @@
 package br.senai.sp.jandira.dao;
 
+import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.Medico;
-import br.senai.sp.jandira.model.PlanoDeSaude;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -151,7 +151,7 @@ public class MedicoDAO {
                         vetor[1],
                         LocalDate.of(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2])));
 
-                // Guardar a especialidade na lista
+                // Guardar o medico na lista
                 medicos.add(m);
 
                 // Ler a próxima linha
@@ -185,4 +185,5 @@ public class MedicoDAO {
 
         return new DefaultTableModel(dados, titulo);
     }
+ 
  }

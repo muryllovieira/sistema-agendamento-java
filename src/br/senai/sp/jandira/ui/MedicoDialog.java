@@ -1,11 +1,17 @@
 package br.senai.sp.jandira.ui;
 
+import br.senai.sp.jandira.dao.EspecialidadeDAO;
 import br.senai.sp.jandira.dao.MedicoDAO;
+import br.senai.sp.jandira.model.Especialidade;
 import br.senai.sp.jandira.model.Medico;
 import br.senai.sp.jandira.model.OperacaoEnum;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.ListModel;
 
 public class MedicoDialog extends javax.swing.JDialog {
 
@@ -21,6 +27,8 @@ public class MedicoDialog extends javax.swing.JDialog {
         initComponents();
         this.operacao = operacao;
         preencherTitulo();
+        adicionandoNaList();
+
     }
 
     public MedicoDialog(
@@ -37,7 +45,11 @@ public class MedicoDialog extends javax.swing.JDialog {
 
         preencherFormulario();
         preencherTitulo();
+        adicionandoNaList();
     }
+    
+   
+  
     
     private void preencherFormulario() {
 
@@ -81,12 +93,12 @@ public class MedicoDialog extends javax.swing.JDialog {
         textFieldDataNascimentoMedico = new javax.swing.JFormattedTextField();
         labelListaEspecialidadeMedico = new javax.swing.JLabel();
         scrollListaEspecialidadeMedico = new javax.swing.JScrollPane();
-        listListaEspecialidadeMedico = new javax.swing.JList<>();
+        listListaEspecialidades = new javax.swing.JList<>();
         labelEspecialidadesMedico = new javax.swing.JLabel();
         scrollEspecialidadeMedico = new javax.swing.JScrollPane();
-        listEspecialidadeMedico = new javax.swing.JList<>();
+        listListaEspecialidadeMedico = new javax.swing.JList<>();
         buttonEsquerdoMedico = new javax.swing.JButton();
-        buttonDIreitoMedico = new javax.swing.JButton();
+        buttonDireitoMedico = new javax.swing.JButton();
         buttonCancelarMedico = new javax.swing.JButton();
         buttonSalvarMedico = new javax.swing.JButton();
 
@@ -133,19 +145,29 @@ public class MedicoDialog extends javax.swing.JDialog {
 
         labelListaEspecialidadeMedico.setText("Lista de Especialidades:");
 
-        listListaEspecialidadeMedico.setBackground(new java.awt.Color(255, 255, 204));
-        scrollListaEspecialidadeMedico.setViewportView(listListaEspecialidadeMedico);
+        listListaEspecialidades.setBackground(new java.awt.Color(255, 255, 204));
+        scrollListaEspecialidadeMedico.setViewportView(listListaEspecialidades);
 
         labelEspecialidadesMedico.setText("Especialidades do médico:");
 
-        listEspecialidadeMedico.setBackground(new java.awt.Color(255, 255, 204));
-        scrollEspecialidadeMedico.setViewportView(listEspecialidadeMedico);
+        listListaEspecialidadeMedico.setBackground(new java.awt.Color(255, 255, 204));
+        scrollEspecialidadeMedico.setViewportView(listListaEspecialidadeMedico);
 
         buttonEsquerdoMedico.setBackground(new java.awt.Color(255, 0, 51));
         buttonEsquerdoMedico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/seta-esquerda.png"))); // NOI18N
+        buttonEsquerdoMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonEsquerdoMedicoActionPerformed(evt);
+            }
+        });
 
-        buttonDIreitoMedico.setBackground(new java.awt.Color(102, 255, 102));
-        buttonDIreitoMedico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/seta-direita.png"))); // NOI18N
+        buttonDireitoMedico.setBackground(new java.awt.Color(102, 255, 102));
+        buttonDireitoMedico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/seta-direita.png"))); // NOI18N
+        buttonDireitoMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDireitoMedicoActionPerformed(evt);
+            }
+        });
 
         buttonCancelarMedico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/senai/sp/jandira/img/cancelar.png"))); // NOI18N
         buttonCancelarMedico.setToolTipText("Cancelar");
@@ -192,7 +214,7 @@ public class MedicoDialog extends javax.swing.JDialog {
                                 .addGap(15, 15, 15)
                                 .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(buttonEsquerdoMedico, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                                    .addComponent(buttonDIreitoMedico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(buttonDireitoMedico, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(33, 33, 33)
                                 .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(labelEspecialidadesMedico)
@@ -253,7 +275,7 @@ public class MedicoDialog extends javax.swing.JDialog {
                         .addGroup(panelDetalhesMedicoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(scrollEspecialidadeMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelDetalhesMedicoLayout.createSequentialGroup()
-                                .addComponent(buttonDIreitoMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(buttonDireitoMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(buttonEsquerdoMedico, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(28, 28, 28)))))
@@ -292,6 +314,14 @@ public class MedicoDialog extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_buttonSalvarMedicoActionPerformed
+
+    private void buttonEsquerdoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdoMedicoActionPerformed
+       
+    }//GEN-LAST:event_buttonEsquerdoMedicoActionPerformed
+
+    private void buttonDireitoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDireitoMedicoActionPerformed
+        
+    }//GEN-LAST:event_buttonDireitoMedicoActionPerformed
 
     private void editar() {
         medico.setCrm(textFieldCrmMedico.getText());
@@ -353,7 +383,7 @@ public class MedicoDialog extends javax.swing.JDialog {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonCancelarMedico;
-    private javax.swing.JButton buttonDIreitoMedico;
+    private javax.swing.JButton buttonDireitoMedico;
     private javax.swing.JButton buttonEsquerdoMedico;
     private javax.swing.JButton buttonSalvarMedico;
     private javax.swing.JPanel jPanel1;
@@ -366,8 +396,8 @@ public class MedicoDialog extends javax.swing.JDialog {
     private javax.swing.JLabel labelMedicoAdicionar;
     private javax.swing.JLabel labelNomeMedico;
     private javax.swing.JLabel labelTelefoneMedico;
-    private javax.swing.JList<String> listEspecialidadeMedico;
     private javax.swing.JList<String> listListaEspecialidadeMedico;
+    private javax.swing.JList<String> listListaEspecialidades;
     private javax.swing.JPanel panelDetalhesMedico;
     private javax.swing.JScrollPane scrollEspecialidadeMedico;
     private javax.swing.JScrollPane scrollListaEspecialidadeMedico;
@@ -378,4 +408,8 @@ public class MedicoDialog extends javax.swing.JDialog {
     private javax.swing.JTextField textFieldNomeMedico;
     private javax.swing.JTextField textFieldTelefoneMedico;
     // End of variables declaration//GEN-END:variables
+
+    private void adicionandoNaList(){
+        listListaEspecialidades.setModel(EspecialidadeDAO.getListaEspecialidade());
+    }
 }
