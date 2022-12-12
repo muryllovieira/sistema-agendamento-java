@@ -2,6 +2,7 @@ package br.senai.sp.jandira.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.swing.SwingConstants;
 
 public class Medico {
 
@@ -32,6 +33,19 @@ public class Medico {
             this.email = email;
             this.crm = crm;
             this.dataDeNascimento = dataDeNascimento;
+            
+            gerarCodigo();
+       
+        }
+        
+        public Medico(Integer codigo, String nome, String telefone, String email, String crm, LocalDate dataDeNascimento, ArrayList<Especialidade> especialidade) {
+            this.codigo = codigo;
+            this.nome = nome;
+            this.telefone = telefone;
+            this.email = email;
+            this.crm = crm;
+            this.dataDeNascimento = dataDeNascimento;
+            this.especialidade = especialidade;
             
             gerarCodigo();
        
@@ -99,8 +113,15 @@ public class Medico {
         this.contador++;
         this.codigo = contador;
         }
-
+        
+        public String getCodigoEspecialidades(){
+            String codigoEspecialidades = "";
+            for(Especialidade especialidade : especialidade) {
+                codigoEspecialidades += especialidade.getCodigo() + "&";
+            }
+            return codigoEspecialidades;
+        }
         public String getMedicoSeparadoPorPontoEVirgula() {
-            return this.codigo + ";" + this.crm + ";" + this.nome + ";" + this.email + ";" + this.telefone + ";" + this.dataDeNascimento;
+            return this.codigo + ";" + this.crm + ";" + this.nome + ";" + this.email + ";" + this.telefone + ";" + this.dataDeNascimento + ";" + getCodigoEspecialidades();
         }
 }

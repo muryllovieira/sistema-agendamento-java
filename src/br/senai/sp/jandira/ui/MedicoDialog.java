@@ -47,10 +47,7 @@ public class MedicoDialog extends javax.swing.JDialog {
         preencherTitulo();
         adicionandoNaList();
     }
-    
-   
-  
-    
+
     private void preencherFormulario() {
 
         textFieldCodigoMedico.setText(medico.getCodigo().toString());
@@ -312,15 +309,89 @@ public class MedicoDialog extends javax.swing.JDialog {
         } else {
             editar();
         }
-
     }//GEN-LAST:event_buttonSalvarMedicoActionPerformed
+    //evento do button salvar
+    private ArrayList<Especialidade> pegarEspecialidades(JList<String> lista) {
+        int tamanho = lista.getModel().getSize();
 
+        ArrayList<Especialidade> listaNova = new ArrayList();
+
+        for (int i = 0; i < tamanho; i++) {
+            int codigo = Integer.valueOf(lista.getModel().getElementAt(i).substring(0, 3));// 100 - Cardiologia
+            Especialidade e = EspecialidadeDAO.getEspecialidade(codigo);
+            listaNova.add(e);
+        }
+        return listaNova;
+    }
     private void buttonEsquerdoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdoMedicoActionPerformed
-       
+        int resposta = JOptionPane.showConfirmDialog(
+                this,
+                "Deseja realmente deletar?",
+                "Atenção", JOptionPane.YES_NO_OPTION,
+                JOptionPane.WARNING_MESSAGE);
+        if (resposta == 0) {
+            if (listListaEspecialidadeMedico.isSelectionEmpty() == false) {
+                ArrayList<String> novaListaMedicos = new ArrayList<>();
+                int tamanho = listListaEspecialidadeMedico.getModel().getSize();
+
+                for (int i = 0; i < tamanho; i++) {
+                    novaListaMedicos.add(listListaEspecialidadeMedico.getModel().getElementAt(i));
+                }
+                novaListaMedicos.remove(listListaEspecialidadeMedico.getSelectedValue());
+
+                DefaultListModel<String> listaEspecialidadeMedicoModel = new DefaultListModel<>();
+                for (String acaoVoltar : novaListaMedicos) {
+                    listaEspecialidadeMedicoModel.addElement(acaoVoltar);
+                }
+                listListaEspecialidadeMedico.setModel(listaEspecialidadeMedicoModel);
+
+            } else {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Não contém nenhuma especialidade na lista",
+                        "Editando Médico",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+
+        }
+
     }//GEN-LAST:event_buttonEsquerdoMedicoActionPerformed
 
     private void buttonDireitoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDireitoMedicoActionPerformed
-        
+
+        if (listListaEspecialidadeMedico.isSelectionEmpty() == true) {
+            ArrayList<String> novaLista = new ArrayList<>();
+
+            int tamanho = listListaEspecialidadeMedico.getModel().getSize();
+            for (int i = 0; i < tamanho; i++) {
+                novaLista.add(listListaEspecialidades.getModel().getElementAt(i));
+            }
+
+            if (novaLista.contains(listListaEspecialidades.getSelectedValue()) == false) {
+                novaLista.add(listListaEspecialidades.getSelectedValue());
+
+                DefaultListModel<String> listaEspecilidadeMedicoModel = new DefaultListModel<>();
+
+                for (String acaoDoBotaoAvancar : novaLista) {
+                    listaEspecilidadeMedicoModel.addElement(acaoDoBotaoAvancar);
+                }
+                listListaEspecialidadeMedico.setModel(listaEspecilidadeMedicoModel);
+
+            } else {
+                JOptionPane.showMessageDialog(null,
+                        "Você não pode adicionar uma especialidade já cadastrada!",
+                        "Médico",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione uma especialidade",
+                    "Médico",
+                    JOptionPane.WARNING_MESSAGE);
+        }
+
     }//GEN-LAST:event_buttonDireitoMedicoActionPerformed
 
     private void editar() {
@@ -342,8 +413,7 @@ public class MedicoDialog extends javax.swing.JDialog {
     }
 
     private void adicionar() {
-        
-        
+
         if (textFieldCrmMedico.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "O CRM do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
             textFieldCrmMedico.requestFocus();
@@ -360,7 +430,7 @@ public class MedicoDialog extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(null, "O telefone do médico é obrigatório!", "Erro", JOptionPane.WARNING_MESSAGE);
             textFieldTelefoneMedico.requestFocus();
         } else {
-        
+
             // Criar um objeto Medico
             Medico novoMedico = new Medico();
             novoMedico.setCrm(textFieldCrmMedico.getText());
@@ -409,7 +479,7 @@ public class MedicoDialog extends javax.swing.JDialog {
     private javax.swing.JTextField textFieldTelefoneMedico;
     // End of variables declaration//GEN-END:variables
 
-    private void adicionandoNaList(){
+    private void adicionandoNaList() {
         listListaEspecialidades.setModel(EspecialidadeDAO.getListaEspecialidade());
     }
 }
