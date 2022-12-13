@@ -46,6 +46,7 @@ public class MedicoDialog extends javax.swing.JDialog {
         preencherFormulario();
         preencherTitulo();
         adicionandoNaList();
+        preencherEspecialidadesMedico();
     }
 
     private void preencherFormulario() {
@@ -56,6 +57,7 @@ public class MedicoDialog extends javax.swing.JDialog {
         textFieldTelefoneMedico.setText(medico.getTelefone());
         textFieldEmailMedico.setText(medico.getEmail());
         textFieldDataNascimentoMedico.setText(medico.getDataDeNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        
     }
 
     private void preencherTitulo() {
@@ -310,19 +312,23 @@ public class MedicoDialog extends javax.swing.JDialog {
             editar();
         }
     }//GEN-LAST:event_buttonSalvarMedicoActionPerformed
+
     //evento do button salvar
     private ArrayList<Especialidade> pegarEspecialidades(JList<String> lista) {
         int tamanho = lista.getModel().getSize();
-
+       
         ArrayList<Especialidade> listaNova = new ArrayList();
-
+        
         for (int i = 0; i < tamanho; i++) {
             int codigo = Integer.valueOf(lista.getModel().getElementAt(i).substring(0, 3));// 100 - Cardiologia
             Especialidade e = EspecialidadeDAO.getEspecialidade(codigo);
+            
             listaNova.add(e);
+            
         }
         return listaNova;
     }
+    
     private void buttonEsquerdoMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsquerdoMedicoActionPerformed
         int resposta = JOptionPane.showConfirmDialog(
                 this,
@@ -400,7 +406,8 @@ public class MedicoDialog extends javax.swing.JDialog {
         medico.setTelefone(textFieldTelefoneMedico.getText());
         medico.setEmail(textFieldEmailMedico.getText());
         medico.setDataDeNascimento(LocalDate.parse(textFieldDataNascimentoMedico.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
+        medico.setEspecialidades(pegarEspecialidades(listListaEspecialidadeMedico));
+        
         MedicoDAO.atualizar(medico);
 
         JOptionPane.showMessageDialog(
@@ -438,7 +445,8 @@ public class MedicoDialog extends javax.swing.JDialog {
             novoMedico.setTelefone(textFieldTelefoneMedico.getText());
             novoMedico.setEmail(textFieldEmailMedico.getText());
             novoMedico.setDataDeNascimento(LocalDate.parse(textFieldDataNascimentoMedico.getText(), DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
+            novoMedico.setEspecialidades(pegarEspecialidades(listListaEspecialidadeMedico));
+            
             // Gravar o objeto, através do Dao.
             MedicoDAO.gravar(novoMedico);
 
@@ -481,5 +489,21 @@ public class MedicoDialog extends javax.swing.JDialog {
 
     private void adicionandoNaList() {
         listListaEspecialidades.setModel(EspecialidadeDAO.getListaEspecialidade());
+    }
+    
+    public ArrayList<String> getNomeEspecialidades(Medico medico) {
+        ArrayList<String> nomes = new ArrayList<>();
+        for(Especialidade especialidade : this.medico.getEspecialidades()) {
+            nomes.add(especialidade.getCodigo() + " - " + especialidade.getNome());
+        }
+        return nomes;
+    }
+    
+    private void preencherEspecialidadesMedico(){
+        DefaultListModel<String> medicoEspecialidades = new DefaultListModel<>();
+        for(String percorrer : getNomeEspecialidades(medico)) {
+            medicoEspecialidades.addElement(percorrer);
+        }
+        listListaEspecialidadeMedico.setModel(medicoEspecialidades);
     }
 }

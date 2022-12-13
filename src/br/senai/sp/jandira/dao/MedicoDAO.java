@@ -39,7 +39,7 @@ public class MedicoDAO {
                     StandardOpenOption.APPEND,
                     StandardOpenOption.WRITE);
 
-            escritor.write(m.getMedicoSeparadoPorPontoEVirgula());
+            escritor.write(m.getMedicoSeparadaPorPontoEVirgula());
             escritor.newLine();
             escritor.close();
         } catch (Exception erro) {
@@ -111,7 +111,7 @@ public class MedicoDAO {
             // no arquivo temporário, exceto o registro que não
             // queremos mais
             for(Medico m : medicos) {
-                bwTemp.write(m.getMedicoSeparadoPorPontoEVirgula());
+                bwTemp.write(m.getMedicoSeparadaPorPontoEVirgula());
                 bwTemp.newLine();
             }
             
@@ -150,6 +150,7 @@ public class MedicoDAO {
                         vetor[3],
                         vetor[1],
                         LocalDate.of(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2])));
+                        
 
                 // Guardar o medico na lista
                 medicos.add(m);
